@@ -7,20 +7,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://eterXing.github.io">
-  <title>js的执行机制--event | 几维的个人博客</title>
+  <title>js的执行机制--eventLoop | 几维的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="我们大家都知道js是单线程的，为了避免一些耗时操作引起阻塞，js将认为分为同步任务和异步任务，同步任务总是优先于异步任务执行，但是在异步任务中，我们有怎么样区分先后呢？">
 <meta name="keywords" content="js">
 <meta property="og:type" content="article">
-<meta property="og:title" content="js的执行机制--event">
+<meta property="og:title" content="js的执行机制--eventLoop">
 <meta property="og:url" content="https://eterXing.github.io/2019/04/26/Loop/index.html">
 <meta property="og:site_name" content="几维的个人博客">
 <meta property="og:description" content="我们大家都知道js是单线程的，为了避免一些耗时操作引起阻塞，js将认为分为同步任务和异步任务，同步任务总是优先于异步任务执行，但是在异步任务中，我们有怎么样区分先后呢？">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://eterxing.github.io/assets/img/loopimg/ajax">
-<meta property="og:updated_time" content="2019-04-26T09:07:27.768Z">
+<meta property="og:image" content="https://eterxing.github.io/assets/img/loopimg/15fdcea13361a1ec">
+<meta property="og:updated_time" content="2019-04-26T09:17:32.234Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="js的执行机制--event">
+<meta name="twitter:title" content="js的执行机制--eventLoop">
 <meta name="twitter:description" content="我们大家都知道js是单线程的，为了避免一些耗时操作引起阻塞，js将认为分为同步任务和异步任务，同步任务总是优先于异步任务执行，但是在异步任务中，我们有怎么样区分先后呢？">
 <meta name="twitter:image" content="https://eterxing.github.io/assets/img/loopimg/ajax">
   
@@ -175,7 +176,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      js的执行机制--event
+      js的执行机制--eventLoop
     </h1>
   
 
@@ -197,7 +198,7 @@
 <li>macro-task(宏任务)：包括整体代码 script，setTimeout，setInterval</li>
 <li>micro-task(微任务)：Promise，process.nextTick</li>
 </ul>
-<p>要注意的是，setTimeout/Promise 等我们称之为任务源。而进入任务队列的是他们指定的具体执行任务，来自不同任务源的任务会进入到不同的任务队列，其中 setTimeout 与 setInterval 是同源的。宏任务内的微任务会在当前宏任务执行完毕后执行</p>
+<p><img src="/assets/img/loopimg/15fdcea13361a1ec" alt="eventLoop"><br>要注意的是，setTimeout/Promise 等我们称之为任务源。而进入任务队列的是他们指定的具体执行任务，来自不同任务源的任务会进入到不同的任务队列，其中 setTimeout 与 setInterval 是同源的。</p>
 <h2 id="根据上述任务源的说法，我们将上面代码分为-script-任务和-setTimeout-任务"><a href="#根据上述任务源的说法，我们将上面代码分为-script-任务和-setTimeout-任务" class="headerlink" title="根据上述任务源的说法，我们将上面代码分为 script 任务和 setTimeout 任务"></a><strong>根据上述任务源的说法，我们将上面代码分为 script 任务和 setTimeout 任务</strong></h2><p>script 任务执行先返回 1 7， 微任务执行返回 6 8<br>接着执行 setTimeout 任务 先返回 2 4 9 11 （注意:两个 setTimeout 是同源的，在一个任务队列内） 微任务执行返回 3 5 10 12<br>尝试 node 运行一遍 结果却是 1 7 6 8 2 4 9 11 3 10 5 12</p>
 <p>为什么和我们的猜想不一样呢,是因为 node 环境下 nextTick 总是优先于 promise.then()执行</p>
 
