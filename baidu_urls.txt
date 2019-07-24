@@ -1,1 +1,1 @@
-https://eterXing.github.io/2019/04/26/Loop/
+https://eterXing.github.io/2019/07/24/自己实现call、apply、bind方法/
